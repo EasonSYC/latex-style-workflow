@@ -1,0 +1,30 @@
+name: LaTeX Compile PDF
+
+on:
+  workflow_call:
+
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    name: Build PDF
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Setup TeX Live
+        uses: EasonSYC/latex-style-setup@main
+
+      - name: Compile PDF
+        uses: EasonSYC/latex-compile-pdf@main
+        with:
+          job-name: ${{ github.event.repository.name }}
+
+      - name: Change to Handout Mode
+        run: echo "\documentclass[handout]{beamer}" > beamer.tex
+      
+      - name: Compile PDF (Handout)
+        uses: EasonSYC/latex-compile-pdf@main
+        with:
+          job-name: ${{ github.event.repository.name }}-handout
